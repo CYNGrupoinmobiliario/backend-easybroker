@@ -4,7 +4,6 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Permitir CORS para que el frontend pueda hacer solicitudes
 app.use((req, res, next) => {
@@ -28,7 +27,7 @@ app.get("/api/propiedades-destacadas", async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error("Error al obtener propiedades destacadas:", error.message);
+        console.error("❌ Error al obtener propiedades destacadas:", error.message);
         res.status(500).json({ error: "Error al obtener propiedades destacadas" });
     }
 });
@@ -46,12 +45,10 @@ app.get("/api/propiedades", async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error("Error al obtener propiedades:", error.message);
+        console.error("❌ Error al obtener propiedades:", error.message);
         res.status(500).json({ error: "Error al obtener propiedades" });
     }
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`✅ Servidor iniciado en http://localhost:${PORT}`);
-});
+// Exportar el servidor para que Vercel lo use
+module.exports = app;
