@@ -13,8 +13,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta para obtener todas las propiedades sin filtro
-app.get("/api/propiedades-sin-filtro", async (req, res) => {
+// Ruta para obtener propiedades publicadas y disponibles
+app.get("/api/propiedades", async (req, res) => {
     try {
         const response = await axios.get("https://api.easybroker.com/v1/properties", {
             headers: {
@@ -26,13 +26,19 @@ app.get("/api/propiedades-sin-filtro", async (req, res) => {
             },
         });
 
-        res.json({ content: response.data.content });
+        // Filtrar solo propiedades con operaciones disponibles
+        const propiedadesDisponibles = response.data.content.filter(propiedad => 
+            propiedad.operations.some(op => 
+                op.status === "available" || op.status === "active"
+            )
+        );
+
+        res.json({ content: propiedadesDisponibles });
     } catch (error) {
-        console.error("❌ Error al obtener todas las propiedades sin filtro:", error.message);
-        res.status(500).json({ error: "Error al obtener todas las propiedades sin filtro" });
+        console.error("❌ Error al obtener propiedades disponibles:", error.message);
+        res.status(500).json({ error: "Error al obtener propiedades disponibles" });
     }
 });
-
 // Ruta para manejar favicon.ico y evitar el error 404
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
