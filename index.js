@@ -13,8 +13,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta para obtener todas las propiedades (solo disponibles)
-app.get("/api/propiedades", async (req, res) => {
+// Ruta para obtener todas las propiedades sin filtro
+app.get("/api/propiedades-sin-filtro", async (req, res) => {
     try {
         const response = await axios.get("https://api.easybroker.com/v1/properties", {
             headers: {
@@ -26,18 +26,10 @@ app.get("/api/propiedades", async (req, res) => {
             },
         });
 
-        // Filtrar propiedades publicadas y disponibles
-        const propiedadesDisponibles = response.data.content.filter(propiedad => 
-            propiedad.operations.some(op => 
-                op.status === "available" || 
-                op.status === "active"
-            )
-        );
-
-        res.json({ content: propiedadesDisponibles });
+        res.json({ content: response.data.content });
     } catch (error) {
-        console.error("❌ Error al obtener todas las propiedades:", error.message);
-        res.status(500).json({ error: "Error al obtener todas las propiedades" });
+        console.error("❌ Error al obtener todas las propiedades sin filtro:", error.message);
+        res.status(500).json({ error: "Error al obtener todas las propiedades sin filtro" });
     }
 });
 
