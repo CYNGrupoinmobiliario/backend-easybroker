@@ -17,14 +17,7 @@ router.get("/propiedades", async (req, res) => {
             },
         });
 
-        // Filtrar propiedades disponibles
-        const propiedadesDisponibles = response.data.content.filter(propiedad =>
-            propiedad.operations.some(op =>
-                op.type === "sale" || op.type === "rent"
-            )
-        );
-
-        res.json({ content: propiedadesDisponibles });
+        res.json({ content: response.data.content });
     } catch (error) {
         console.error("❌ Error al obtener propiedades:", error.message);
         res.status(500).json({ error: "Error al obtener propiedades" });

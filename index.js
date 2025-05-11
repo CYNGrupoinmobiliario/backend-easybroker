@@ -1,6 +1,5 @@
 // index.js
 const express = require("express");
-const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
@@ -18,7 +17,7 @@ app.get("/", (req, res) => {
     res.send("🚀 API de EasyBroker está activa");
 });
 
-// Importar rutas desde routes/propiedades.js
+// Importar las rutas de propiedades
 const propiedadesRoutes = require("./routes/propiedades");
 app.use("/api", propiedadesRoutes);
 
