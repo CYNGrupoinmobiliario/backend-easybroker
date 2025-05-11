@@ -51,15 +51,15 @@ app.get("/api/propiedades", async (req, res) => {
                 "X-Authorization": process.env.EASYBROKER_API_KEY,
             },
             params: {
-                limit: 50, // Puedes ajustar este número según sea necesario
-                status: "published"
+                limit: 50,
+                status: "published" // Solo propiedades publicadas
             },
         });
 
         // Filtrar propiedades que tienen al menos una operación activa
         const propiedadesDisponibles = response.data.content.filter(propiedad => 
             propiedad.operations.some(op => 
-                op.status === "available" && (op.type === "sale" || op.type === "rent")
+                op.status === "available"
             )
         );
 
