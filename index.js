@@ -51,17 +51,25 @@ app.get("/api/propiedades", async (req, res) => {
                 "X-Authorization": process.env.EASYBROKER_API_KEY,
             },
             params: {
-                limit: 20,
+                limit: 50, // Puedes ajustar este número según sea necesario
                 status: "published"
             },
         });
 
-        res.json(response.data);
+        // Filtrar propiedades que tienen al menos una operación activa
+        const propiedadesDisponibles = response.data.content.filter(propiedad => 
+            propiedad.operations.some(op => 
+                op.status === "available" && (op.type === "sale" || op.type === "rent")
+            )
+        );
+
+        res.json({ content: propiedadesDisponibles });
     } catch (error) {
         console.error("❌ Error al obtener todas las propiedades:", error.message);
         res.status(500).json({ error: "Error al obtener todas las propiedades" });
     }
 });
+
 
 // Ruta para manejar favicon.ico y evitar el error 404
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
