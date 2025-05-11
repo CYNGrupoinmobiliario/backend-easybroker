@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta principal
+// Ruta principal para verificar si el servidor está activo
 app.get("/", (req, res) => {
     res.send("🚀 API de EasyBroker está activa");
 });
@@ -54,6 +54,9 @@ app.get("/api/propiedades", async (req, res) => {
         res.status(500).json({ error: "Error al obtener propiedades" });
     }
 });
+
+// Ruta para manejar favicon.ico y evitar el error 404
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 // Exportar el servidor para que Vercel lo use
 module.exports = app;
