@@ -4,7 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
-// Ruta temporal para revisar propiedades sin filtro
+// Ruta para obtener todas las propiedades sin filtro
 router.get("/propiedades-todas", async (req, res) => {
     try {
         const response = await axios.get("https://api.easybroker.com/v1/properties", {
