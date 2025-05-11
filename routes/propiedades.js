@@ -4,6 +4,11 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
+// Ruta para verificar que la API está activa
+router.get("/", (req, res) => {
+    res.send("🚀 API de EasyBroker está activa");
+});
+
 // Ruta para obtener todas las propiedades
 router.get("/propiedades", async (req, res) => {
     try {

@@ -12,11 +12,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta principal para verificar que el servidor está activo
-app.get("/", (req, res) => {
-    res.send("🚀 API de EasyBroker está activa");
-});
-
 // Importar las rutas de propiedades
 const propiedadesRoutes = require("./routes/propiedades");
 app.use("/api", propiedadesRoutes);
