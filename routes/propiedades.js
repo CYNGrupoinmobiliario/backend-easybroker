@@ -4,6 +4,11 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
+// Ruta principal para verificar que el servidor está activo
+router.get("/", (req, res) => {
+    res.send("🚀 API de EasyBroker está activa");
+});
+
 // Ruta para obtener todas las propiedades sin filtro
 router.get("/propiedades-todas", async (req, res) => {
     try {
@@ -16,7 +21,6 @@ router.get("/propiedades-todas", async (req, res) => {
             },
         });
 
-        // Muestra todas las propiedades sin filtrar
         res.json({ content: response.data.content });
     } catch (error) {
         console.error("❌ Error al obtener propiedades:", error.message);
