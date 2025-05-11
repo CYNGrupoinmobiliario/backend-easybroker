@@ -28,30 +28,19 @@ app.get("/api/propiedades-destacadas", async (req, res) => {
             params: {
                 limit: 6,
                 highlighted: true,
+                status: "published" // Solo propiedades publicadas
             },
         });
-        res.json(response.data);
+
+        // Filtrar propiedades disponibles (no vendidas o rentadas)
+        const propiedadesDisponibles = response.data.content.filter(propiedad => 
+            propiedad.operations.some(op => op.status === "available")
+        );
+
+        res.json({ content: propiedadesDisponibles });
     } catch (error) {
         console.error("❌ Error al obtener propiedades destacadas:", error.message);
         res.status(500).json({ error: "Error al obtener propiedades destacadas" });
-    }
-});
-
-// Ruta para obtener todas las propiedades
-app.get("/api/propiedades", async (req, res) => {
-    try {
-        const response = await axios.get("https://api.easybroker.com/v1/properties", {
-            headers: {
-                "X-Authorization": process.env.EASYBROKER_API_KEY,
-            },
-            params: {
-                limit: 20,
-            },
-        });
-        res.json(response.data);
-    } catch (error) {
-        console.error("❌ Error al obtener propiedades:", error.message);
-        res.status(500).json({ error: "Error al obtener propiedades" });
     }
 });
 
