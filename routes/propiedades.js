@@ -4,12 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
-// Ruta para verificar que la API está activa
-router.get("/", (req, res) => {
-    res.send("🚀 API de EasyBroker está activa");
-});
-
-// Ruta para obtener todas las propiedades
+// Ruta para obtener solo propiedades publicadas y disponibles
 router.get("/propiedades", async (req, res) => {
     try {
         const response = await axios.get("https://api.easybroker.com/v1/properties", {
@@ -18,11 +13,20 @@ router.get("/propiedades", async (req, res) => {
             },
             params: {
                 limit: 50,
-                status: "published"
+                status: "published"  // Solo propiedades publicadas
             },
         });
 
-        res.json({ content: response.data.content });
+        // Filtrar propiedades disponibles
+        const disponibles = response.data.content.filter(propiedad => {
+            return propiedad.operations.some(op => 
+                (op.status === "available" || op.status === "published") &&  // Verifica que estén disponibles o publicadas
+                op.type !== "sold" && op.type !== "rented" &&  // Excluye vendidas o rentadas
+                !propiedad.archived  // Excluye propiedades archivadas
+            );
+        });
+
+        res.json({ content: disponibles });
     } catch (error) {
         console.error("❌ Error al obtener propiedades:", error.message);
         res.status(500).json({ error: "Error al obtener propiedades" });
