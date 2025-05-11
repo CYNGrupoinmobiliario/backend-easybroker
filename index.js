@@ -13,6 +13,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Ruta principal
+app.get("/", (req, res) => {
+    res.send("🚀 API de EasyBroker está activa");
+});
+
 // Ruta para obtener propiedades destacadas
 app.get("/api/propiedades-destacadas", async (req, res) => {
     try {
