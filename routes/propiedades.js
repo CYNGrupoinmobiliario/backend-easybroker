@@ -4,8 +4,8 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
-// Ruta para obtener propiedades que estén marcadas como "publicada"
-router.get("/propiedades", async (req, res) => {
+// Ruta temporal para revisar propiedades sin filtro
+router.get("/propiedades-todas", async (req, res) => {
     try {
         const response = await axios.get("https://api.easybroker.com/v1/properties", {
             headers: {
@@ -16,15 +16,11 @@ router.get("/propiedades", async (req, res) => {
             },
         });
 
-        // Filtrar propiedades que estén en estado "publicada"
-        const publicadas = response.data.content.filter(propiedad =>
-            propiedad.status.toLowerCase() === "publicada"
-        );
-
-        res.json({ content: publicadas });
+        // Muestra todas las propiedades sin filtro
+        res.json({ content: response.data.content });
     } catch (error) {
-        console.error("❌ Error al obtener propiedades:", error.message);
-        res.status(500).json({ error: "Error al obtener propiedades" });
+        console.error("❌ Error al obtener propiedades sin filtro:", error.message);
+        res.status(500).json({ error: "Error al obtener propiedades sin filtro" });
     }
 });
 
