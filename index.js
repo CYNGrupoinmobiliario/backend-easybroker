@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const app = express();
 
-// Permitir CORS para que el frontend pueda hacer solicitudes
+// Habilitar CORS
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET");
@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta principal para verificar si el servidor está activo
+// Ruta principal para verificar que el servidor está activo
 app.get("/", (req, res) => {
     res.send("🚀 API de EasyBroker está activa");
 });
@@ -56,7 +56,12 @@ app.get("/api/propiedades", async (req, res) => {
 });
 
 // Ruta para manejar favicon.ico y evitar el error 404
-app.get("/favicon.ico", (req, res) => res.status(204).end());
+app.get("/favicon.ico", (req, res) => res.sendStatus(204));
+
+// Manejar rutas desconocidas para evitar errores 404 en el servidor
+app.use((req, res) => {
+    res.status(404).json({ error: "Ruta no encontrada" });
+});
 
 // Exportar el servidor para que Vercel lo use
 module.exports = app;
